@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+# Check if run as sudo or re-start it if it was not
+if [[ $EUID -ne 0 ]]; then
+    echo "Elevating privileges..."
+    exec sudo "$0" "$@"
+fi
+
 # Ensure 'fuser' is installed for the force feature
 if ! command -v fuser &> /dev/null; then
     echo "Installing psmisc (required for force unmount)..."
